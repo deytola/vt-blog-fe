@@ -24,7 +24,7 @@ const SearchBar: FC<Props> = ({ query, onChange, fetchBlogs }) => {
     }, [debouncedQuery]);
 
     return (
-        <div className="flex justify-center bg-primary py-10 md:py-16 container">
+        <div className="flex justify-center bg-primary py-10 md:py-16">
             <div>
                 <h1 className="text-4xl lg:text-5xl text-center text-white font-bold mb-8">
                     Looking for a particular story?
