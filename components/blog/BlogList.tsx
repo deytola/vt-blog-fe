@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 
 type Props = {
     data: { blogs: BlogType[]; totalPages: number };
+    // eslint-disable-next-line no-unused-vars
     setPage: (e: number) => void;
     page: number;
 };
@@ -18,7 +19,7 @@ const BlogList: FC<Props> = ({ data, setPage, page }) => {
                     .map((blog) => <BlogCard key={blog.id} data={blog} />)}
             </div>
 
-            {data?.totalPages > 1 && (
+            {data?.totalPages >= 1 && (
                 <div className="flex justify-center">
                     <ReactPaginate
                         breakLabel="..."

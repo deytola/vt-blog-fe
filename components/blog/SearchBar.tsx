@@ -42,7 +42,10 @@ const SearchBar: FC<Props> = ({ query, onChange, fetchBlogs }) => {
                         {debouncedQuery && !!suggestions?.blogs?.length && (
                             <div className="absolute flex flex-col divide-y bg-white w-full max-h-48 rounded-b-md border z-20 shadow overflow-y-scroll">
                                 {suggestions?.blogs?.map((blog) => (
-                                    <Link href={`/${blog.slug}`} className="px-3 py-1">
+                                    <Link
+                                        key={blog.id}
+                                        href={`/${blog.slug}`}
+                                        className="px-3 py-1">
                                         {blog.title}
                                     </Link>
                                 ))}
