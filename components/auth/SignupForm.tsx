@@ -40,9 +40,10 @@ const SignupForm: FC = () => {
         },
     });
 
+    const handleSuccess = () => form.reset();
+
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        console.log(data);
-        dispatch(signup({ payload: data }));
+        dispatch(signup({ payload: data, handleSuccess }));
     };
 
     return (

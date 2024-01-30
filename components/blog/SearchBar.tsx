@@ -8,7 +8,7 @@ import { blogSelector, getBlogSuggestions } from "@/redux/features/blog.slice";
 
 type Props = {
     query: string;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void; //eslint-disable-line
     fetchBlogs: () => void;
 };
 
@@ -24,8 +24,8 @@ const SearchBar: FC<Props> = ({ query, onChange, fetchBlogs }) => {
     }, [debouncedQuery]);
 
     return (
-        <div className="flex justify-center bg-primary py-10 md:py-16">
-            <div>
+        <div className="flex justify-center bg-primary py-10 md:py-16 ">
+            <div className="container">
                 <h1 className="text-4xl lg:text-5xl text-center text-white font-bold mb-8">
                     Looking for a particular story?
                 </h1>
@@ -43,7 +43,7 @@ const SearchBar: FC<Props> = ({ query, onChange, fetchBlogs }) => {
                             <div className="absolute flex flex-col divide-y bg-white w-full max-h-48 rounded-b-md border z-20 shadow overflow-y-scroll">
                                 {suggestions?.blogs?.map((blog) => (
                                     <Link
-                                        key={blog.id}
+                                        key={blog.slug}
                                         href={`/${blog.slug}`}
                                         className="px-3 py-1">
                                         {blog.title}
