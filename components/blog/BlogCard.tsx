@@ -1,7 +1,6 @@
 import { FC } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { BlogType } from "@/types/blog.types";
 import TimeAgo from "@/components/blog/TimeAgo";

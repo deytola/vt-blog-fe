@@ -43,7 +43,7 @@ const NavBar: FC = () => {
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{
-                                        width: false || pathName === path ? 24 : 0,
+                                        width: pathName === path ? 24 : 0,
                                     }}
                                     transition={{ duration: 0.5 }}
                                     className="h-0.5 bg-sky-600"

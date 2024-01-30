@@ -108,7 +108,7 @@ const blogSlice = createSlice({
             .addCase(createBlog.pending, (state) => {
                 state.create_blog_loading = true;
             })
-            .addCase(createBlog.fulfilled, (state, action) => {
+            .addCase(createBlog.fulfilled, (state) => {
                 state.create_blog_loading = false;
             })
             .addCase(createBlog.rejected, (state) => {
@@ -143,7 +143,7 @@ const blogSlice = createSlice({
             .addCase(deleteBlog.pending, (state) => {
                 state.delete_loading = true;
             })
-            .addCase(deleteBlog.fulfilled, (state, action) => {
+            .addCase(deleteBlog.fulfilled, (state) => {
                 state.delete_loading = false;
             })
             .addCase(deleteBlog.rejected, (state) => {
