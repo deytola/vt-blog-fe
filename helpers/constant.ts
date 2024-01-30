@@ -1,4 +1,1 @@
-export const navLinks = [
-    // { path: "/", title: "Home" },
-    { path: "/create", title: "Create", auth: true },
-];
+export const navLinks = [{ path: "/create", title: "Create", auth: true }];

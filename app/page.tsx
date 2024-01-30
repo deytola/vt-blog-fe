@@ -4,19 +4,20 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { NextPage } from "next";
 import SearchBar from "@/components/blog/SearchBar";
 import BlogList from "@/components/blog/BlogList";
-import { useAppDispatch } from "@/redux/store";
-import { getBlogs } from "@/redux/features/blog.slice";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { blogSelector, getBlogs } from "@/redux/features/blog.slice";
+import Loading from "@/app/loading";
 
 const Home: NextPage = () => {
     const [query, setQuery] = useState<string>("");
-    const [page, setPage] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
     const dispatch = useAppDispatch();
-
+    const { blogs } = useAppSelector(blogSelector);
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
     };
 
-    const fetchBlogs = () => {
+    const fetchBlogs = async () => {
         dispatch(getBlogs({ page, query }));
     };
 
@@ -27,7 +28,11 @@ const Home: NextPage = () => {
     return (
         <>
             <SearchBar query={query} onChange={handleChange} fetchBlogs={fetchBlogs} />
-            <BlogList page={page} setPage={setPage} />
+            {blogs.blogs.length > 0 ? (
+                <BlogList data={blogs} page={page} setPage={setPage} />
+            ) : (
+                <Loading />
+            )}
         </>
     );
 };

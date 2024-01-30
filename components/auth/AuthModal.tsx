@@ -14,7 +14,7 @@ const AuthModal = () => {
     const [isLogin, setIsLogin] = useState(true);
     return (
         <Dialog>
-            <DialogTrigger>Login</DialogTrigger>
+            <DialogTrigger>Login | Register</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-4 text-lg">

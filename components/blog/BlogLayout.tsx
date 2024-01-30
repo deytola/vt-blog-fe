@@ -1,11 +1,16 @@
 "use client";
 
-import React, { FC } from "react";
-import { BlogType } from "@/types/blog.types";
-import dayjs from "dayjs";
+import React, { FC, useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { BlogType } from "@/types/blog.types";
 import RelatedBlogs from "./RelatedBlogs";
 import PageHeader from "../navigation/PageHeader";
+import TimeAgo from "@/components/blog/TimeAgo";
+import { Button } from "@/components/ui/button";
+import { authenticatedUser } from "@/redux/features/auth.slice";
+import { UserType } from "@/types/auth.types";
+import { useAppDispatch } from "@/redux/store";
 
 type Props = {
     data: {
@@ -15,6 +20,23 @@ type Props = {
 };
 
 const BlogLayout: FC<Props> = ({ data }) => {
+    const auth = authenticatedUser();
+    const [user, setUser] = useState<UserType | null>();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (auth) {
+            setUser(auth);
+        } else {
+            setUser(null);
+        }
+    }, [dispatch]);
+    const router = useRouter();
+
+    const handleDelete = (): void => {
+        router.push(`/delete/${data?.blog?.slug}`);
+    };
+
     return (
         <>
             <PageHeader
@@ -25,7 +47,7 @@ const BlogLayout: FC<Props> = ({ data }) => {
                             By{" "}
                             {`${data?.blog?.author?.firstName} ${data?.blog?.author?.lastName}`}
                         </p>
-                        <p>{dayjs(data?.blog?.created_at).format("MMMM DD, YYYY")}</p>
+                        <TimeAgo timestamp={data?.blog?.created_at} />
                     </>
                 }
             />
@@ -43,6 +65,19 @@ const BlogLayout: FC<Props> = ({ data }) => {
                 </figure>
 
                 <p className="leading-8">{data?.blog?.content}</p>
+                <>
+                    {user ? (
+                        <Button
+                            type="button"
+                            size="lg"
+                            variant="destructive"
+                            onClick={handleDelete}>
+                            Delete
+                        </Button>
+                    ) : (
+                        ""
+                    )}
+                </>
             </div>
 
             <RelatedBlogs data={data?.relatedBlogs} />

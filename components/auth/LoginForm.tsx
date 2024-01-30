@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 import {
     Form,
     FormControl,
@@ -18,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { authSelector, login } from "@/redux/features/auth.slice";
 
 const LoginForm: FC = () => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const { login_loading } = useAppSelector(authSelector);
 
@@ -36,7 +38,12 @@ const LoginForm: FC = () => {
         },
     });
 
-    const handleSuccess = () => form.reset();
+    const navigateToHomePage = () => router.replace("/");
+
+    const handleSuccess = () => {
+        form.reset();
+        navigateToHomePage();
+    };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
         dispatch(login({ payload: data, handleSuccess }));
@@ -83,8 +90,8 @@ const LoginForm: FC = () => {
                         )}
                     />
 
-                    <Button type="submit" size="lg">
-                        {login_loading ? "Loggin in" : "Login"}
+                    <Button type="submit" size="lg" disabled={login_loading}>
+                        {login_loading ? "Logging in" : "Login"}
                     </Button>
                 </form>
             </Form>

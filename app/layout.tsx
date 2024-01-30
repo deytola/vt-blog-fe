@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <ToastContainer
                         theme="light"
                         position="top-right"
-                        autoClose={1500}
+                        autoClose={800}
                         draggable={false}
                         closeOnClick
                     />

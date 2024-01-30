@@ -1,11 +1,15 @@
-import { FC } from "react";
-import { BeatLoader } from "react-spinners";
+import React, { FC } from "react";
+import SkeletonCard from "@/components/SkeletonCard";
 
 const Loading: FC = () => {
     return (
-        <div className="flex items-center justify-center h-96">
-            <BeatLoader loading={true} color="#111827" size={12} />
-        </div>
+        <main>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-12 container p-6 md:p-8 lg:p-12">
+                {"theory".split("").map((i) => (
+                    <SkeletonCard key={i} />
+                ))}
+            </div>
+        </main>
     );
 };
 

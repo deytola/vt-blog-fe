@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Cookies from "js-cookie";
-
 import {
     Form,
     FormControl,
@@ -27,6 +26,7 @@ import { blogSelector, createBlog } from "@/redux/features/blog.slice";
 const CreateBlog: NextPage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState<string>("");
+    const [category, setCategory] = useState<string>("");
 
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -90,7 +90,7 @@ const CreateBlog: NextPage = () => {
     };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        const payload = { ...data, image: imageUrl };
+        const payload = { ...data, image: imageUrl, category };
         dispatch(createBlog({ payload, handleSuccess }));
     };
 
@@ -148,6 +148,22 @@ const CreateBlog: NextPage = () => {
                             </FormItem>
                         )}
                     />
+
+                    <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <FormControl>
+                            <select
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                className="block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200">
+                                <option value="General">General</option>
+                                <option value="Adventure">Adventure</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Fashion">Fashion</option>
+                            </select>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
 
                     <div className="flex items-center gap-4">
                         <Button

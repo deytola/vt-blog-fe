@@ -4,6 +4,7 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { BlogType } from "@/types/blog.types";
+import TimeAgo from "@/components/blog/TimeAgo";
 
 type Props = {
     data: BlogType;
@@ -16,8 +17,13 @@ const BlogCard: FC<Props> = ({ data }) => {
                 viewport={{ once: true }}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1 }}>
+                transition={{ duration: 1 }}
+                className="relative">
                 <figure className="w-full relative h-60 overflow-hidden rounded-md mb-2">
+                    {/* Overlay div with category */}
+                    <div className="absolute m-4 rounded top-0 right-0 p-2 bg-black bg-opacity-50 text-white z-10">
+                        <span className="text-xs">{data.category}</span>
+                    </div>
                     <Image
                         src={data.image}
                         alt={data.title}
@@ -27,9 +33,7 @@ const BlogCard: FC<Props> = ({ data }) => {
                         className="object-cover rounded-md hover:scale-105 duration-300"
                     />
                 </figure>
-                <p className="text-[#6C757D] text-sm">
-                    {dayjs(data.created_at).format("DD.MM.YYYY")}
-                </p>
+                <TimeAgo timestamp={data.created_at} />
                 <h3
                     className="text-black text-lg font-semibold w-full truncate my-1"
                     title={data.title}>

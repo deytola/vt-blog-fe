@@ -11,6 +11,7 @@ export type BlogType = {
     deleted_at: string;
     content: string;
     author?: UserType;
+    category?: string;
 };
 
 export type CreateBlogType = {
