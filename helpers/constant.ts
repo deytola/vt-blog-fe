@@ -1,4 +1,4 @@
 export const navLinks = [
     // { path: "/", title: "Home" },
-    { path: "/create", title: "Create" },
+    { path: "/create", title: "Create", auth: true },
 ];

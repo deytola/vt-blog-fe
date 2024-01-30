@@ -5,10 +5,10 @@ import { NextPage } from "next";
 import PageHeader from "@/components/navigation/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import Cookies from "js-cookie";
 
 import {
     Form,
@@ -21,8 +21,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
-import { useAppDispatch } from "@/redux/store";
-import { createBlog } from "@/redux/features/blog.slice";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { blogSelector, createBlog } from "@/redux/features/blog.slice";
 
 const CreateBlog: NextPage = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -30,6 +30,7 @@ const CreateBlog: NextPage = () => {
 
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const { create_blog_loading } = useAppSelector(blogSelector);
 
     const navigateToHomePage = () => router.push("/");
     const FormSchema = z.object({
@@ -51,7 +52,7 @@ const CreateBlog: NextPage = () => {
             return;
         }
 
-        if (localStorage.getItem("user")) {
+        if (Cookies.get("user")) {
             setLoading(true);
             axios
                 .post(
@@ -59,7 +60,7 @@ const CreateBlog: NextPage = () => {
                     { content_type: "image/png" },
                     {
                         headers: {
-                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user") || "").token}`,
+                            Authorization: `Bearer ${JSON.parse(Cookies.get("user") || "").token}`,
                         },
                     }
                 )
@@ -156,7 +157,7 @@ const CreateBlog: NextPage = () => {
                             Cancel
                         </Button>
                         <Button type="submit" size="lg" onClick={() => {}}>
-                            Submit
+                            {create_blog_loading ? "Submitting" : "Submit"}
                         </Button>
                     </div>
                 </form>

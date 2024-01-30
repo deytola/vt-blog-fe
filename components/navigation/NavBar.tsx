@@ -35,17 +35,22 @@ const NavBar: FC = () => {
                 </Link>
 
                 <div className="flex items-center gap-6">
-                    {navLinks.map(({ path, title }) => (
-                        <div key={title}>
-                            <Link href={path}>{title}</Link>
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: false || pathName === path ? 24 : 0 }}
-                                transition={{ duration: 0.5 }}
-                                className="h-0.5 bg-sky-600"
-                            />
-                        </div>
-                    ))}
+                    {navLinks
+                        .filter((e) => (!e.auth ? true : user))
+                        .map(({ path, title }) => (
+                            <div key={title}>
+                                <Link href={path}>{title}</Link>
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{
+                                        width: false || pathName === path ? 24 : 0,
+                                    }}
+                                    transition={{ duration: 0.5 }}
+                                    className="h-0.5 bg-sky-600"
+                                />
+                            </div>
+                        ))}
+
                     {user ? (
                         <button onClick={handleLogout}>Logout</button>
                     ) : (

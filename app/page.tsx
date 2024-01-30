@@ -4,24 +4,19 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { NextPage } from "next";
 import SearchBar from "@/components/blog/SearchBar";
 import BlogList from "@/components/blog/BlogList";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { blogSelector, getBlogs } from "@/redux/features/blog.slice";
-import Loading from "@/app/loading";
+import { useAppDispatch } from "@/redux/store";
+import { getBlogs } from "@/redux/features/blog.slice";
 
 const Home: NextPage = () => {
     const [query, setQuery] = useState<string>("");
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(0);
     const dispatch = useAppDispatch();
-    const { blogs } = useAppSelector(blogSelector);
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
     };
 
-    const fetchBlogs = async () => {
-        await new Promise<void>((resolve) => {
-            // @ts-ignore
-            setTimeout(resolve(), 5000);
-        });
+    const fetchBlogs = () => {
         dispatch(getBlogs({ page, query }));
     };
 
@@ -32,11 +27,7 @@ const Home: NextPage = () => {
     return (
         <>
             <SearchBar query={query} onChange={handleChange} fetchBlogs={fetchBlogs} />
-            {blogs.blogs.length > 0 ? (
-                <BlogList data={blogs} page={page} setPage={setPage} />
-            ) : (
-                <Loading />
-            )}
+            <BlogList page={page} setPage={setPage} />
         </>
     );
 };

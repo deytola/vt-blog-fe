@@ -36,9 +36,10 @@ const LoginForm: FC = () => {
         },
     });
 
+    const handleSuccess = () => form.reset();
+
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        console.log(data);
-        dispatch(login({ payload: data }));
+        dispatch(login({ payload: data, handleSuccess }));
     };
 
     return (

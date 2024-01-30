@@ -3,13 +3,31 @@ import { toast } from "react-toastify";
 import * as api from "../api";
 import { LoginType, SignupType, UserType } from "@/types/auth.types";
 import { RootState } from "../store";
+import Cookies from "js-cookie";
+
+const setCookies = ({ name, data }: { name: string; data: any }) => {
+    Cookies.set(name, JSON.stringify(data), {
+        httpOnly: false,
+        secure: true,
+        domain: process.env.NEXT_PUBLIC_TL_DOMAIN,
+        sameSite: "none",
+        path: "/",
+    });
+};
 
 export const login = createAsyncThunk(
     "/login",
-    async ({ payload }: { payload: LoginType }, { rejectWithValue }) => {
+    async (
+        { payload, handleSuccess }: { payload: LoginType; handleSuccess: any },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await api.login(payload);
-            toast.success("Signed in successfully");
+            handleSuccess();
+            setCookies({ name: "user", data: response.data });
+            toast.success("Signed in successfully", {
+                onClose: () => window.location.reload(),
+            });
             return response.data;
         } catch (err: any) {
             toast.error(err.response.data.message);
@@ -20,10 +38,17 @@ export const login = createAsyncThunk(
 
 export const signup = createAsyncThunk(
     "/signup",
-    async ({ payload }: { payload: SignupType }, { rejectWithValue }) => {
+    async (
+        { payload, handleSuccess }: { payload: SignupType; handleSuccess: any },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await api.signup(payload);
-            toast.success("Signed up successfully");
+            handleSuccess();
+            setCookies({ name: "user", data: response.data });
+            toast.success("Signed up successfully", {
+                onClose: () => window.location.reload(),
+            });
             return response.data;
         } catch (err: any) {
             toast.error(err.response.data.message);
@@ -37,8 +62,8 @@ export const authenticatedUser = () => {
     if (typeof window === "undefined") {
         return false;
     }
-    if (localStorage.getItem("user")) {
-        return JSON.parse(localStorage.getItem("user") || "").user;
+    if (Cookies.get("user")) {
+        return JSON.parse(Cookies.get("user") || "");
     }
     return false;
 };
@@ -56,9 +81,12 @@ const authSlice = createSlice({
             state.user = action.payload;
         },
         logout: (state) => {
-            localStorage.removeItem("user");
-            window.location.reload();
             state.user = null;
+            Cookies.remove("user", {
+                path: "/",
+                domain: process.env.NEXT_PUBLIC_TL_DOMAIN,
+            });
+            window.location.reload();
         },
     },
 
@@ -69,7 +97,6 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.login_loading = false;
-                localStorage.setItem("user", JSON.stringify({ ...action.payload }));
                 state.user = action.payload?.user;
             })
             .addCase(login.rejected, (state) => {
@@ -82,7 +109,6 @@ const authSlice = createSlice({
             })
             .addCase(signup.fulfilled, (state, action) => {
                 state.signup_loading = false;
-                localStorage.setItem("user", JSON.stringify({ ...action.payload }));
                 state.user = action.payload?.user;
             })
             .addCase(signup.rejected, (state) => {

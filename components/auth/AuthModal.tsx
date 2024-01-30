@@ -14,27 +14,27 @@ const AuthModal = () => {
     const [isLogin, setIsLogin] = useState(true);
     return (
         <Dialog>
-            <DialogTrigger>Login | Register</DialogTrigger>
+            <DialogTrigger>Login</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-4 text-lg">
-                        <h3
+                        <p
                             className={clsx(
                                 "cursor-pointer",
                                 isLogin ? "font-bold underline" : "font-normal"
                             )}
                             onClick={() => setIsLogin(true)}>
                             Login
-                        </h3>{" "}
+                        </p>{" "}
                         |{" "}
-                        <h3
+                        <p
                             className={clsx(
                                 "cursor-pointer",
                                 !isLogin ? "font-bold underline" : "font-normal"
                             )}
                             onClick={() => setIsLogin(false)}>
                             Register
-                        </h3>
+                        </p>
                     </DialogTitle>
                     {isLogin ? <LoginForm /> : <SignupForm />}
                 </DialogHeader>

@@ -1,5 +1,6 @@
 "use client";
 
+// import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Provider } from "react-redux";
 import "./globals.css";
@@ -10,24 +11,28 @@ import Loader from "@/components/common/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const inter = Poppins({ subsets: ["latin"], weight: ["400", "500", "600"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600"] });
+
+// export const metadata: Metadata = {
+//     title: "Vivid Blog",
+//     description: "Leading Blogging Platform",
+// };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
             <Provider store={store}>
-                <Loader />
-
                 <body
-                    className={`${inter.className} flex flex-col justify-between min-h-screen`}>
+                    className={`${poppins.className} flex flex-col justify-between min-h-screen`}>
                     <div>
+                        <Loader />
                         <NavBar />
                         {children}
                     </div>
                     <ToastContainer
                         theme="light"
                         position="top-right"
-                        autoClose={2000}
+                        autoClose={1500}
                         draggable={false}
                         closeOnClick
                     />

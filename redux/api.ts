@@ -1,14 +1,15 @@
 import { LoginType, SignupType } from "@/types/auth.types";
 import { CreateBlogType } from "@/types/blog.types";
 import axios, { AxiosHeaders } from "axios";
+import Cookies from "js-cookie";
 
 const API = axios.create({ baseURL: process.env.NEXT_PUBLIC_BASE_URL });
 
 API.interceptors.request.use((req) => {
-    if (localStorage.getItem("user")) {
+    if (Cookies.get("user")) {
         (req.headers as AxiosHeaders).set(
             "Authorization",
-            `Bearer ${JSON.parse(localStorage.getItem("user") || "").token}`
+            `Bearer ${JSON.parse(Cookies.get("user") || "").token}`
         );
     }
 
