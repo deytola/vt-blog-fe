@@ -64,7 +64,10 @@ const BlogLayout: FC<Props> = ({ data }) => {
                     />
                 </figure>
 
-                <p className="leading-8">{data?.blog?.content}</p>
+                <div
+                    className="leading-8"
+                    dangerouslySetInnerHTML={{ __html: data?.blog?.content }}
+                />
                 <>
                     {user ? (
                         <Button

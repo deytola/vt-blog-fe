@@ -38,7 +38,6 @@ const BlogCard: FC<Props> = ({ data }) => {
                     title={data.title}>
                     {data.title}
                 </h3>
-                <p className="text-[#6C757D] text-sm">{data.content.slice(0, 110)}...</p>
             </motion.div>
         </Link>
     );

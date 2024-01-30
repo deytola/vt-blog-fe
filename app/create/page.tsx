@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { NextPage } from "next";
+import axios from "axios";
 import PageHeader from "@/components/navigation/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -18,8 +19,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
+import TextEditor from "@/components/ui/texteditor";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { blogSelector, createBlog } from "@/redux/features/blog.slice";
 
@@ -27,6 +27,7 @@ const CreateBlog: NextPage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState<string>("");
     const [category, setCategory] = useState<string>("");
+    const [content, setContent] = useState<string>("");
 
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -35,16 +36,18 @@ const CreateBlog: NextPage = () => {
     const navigateToHomePage = () => router.push("/");
     const FormSchema = z.object({
         title: z.string().min(1, { message: "Please enter title" }),
-        content: z.string().min(1, { message: "Please enter content" }),
     });
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             title: "",
-            content: "",
         },
     });
+
+    const handleEditorChange = (value: string): void => {
+        setContent(value);
+    };
 
     const handleFileUpload = async (e: any) => {
         const file = e.target.files[0];
@@ -90,7 +93,7 @@ const CreateBlog: NextPage = () => {
     };
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        const payload = { ...data, image: imageUrl, category };
+        const payload = { ...data, image: imageUrl, category, content };
         dispatch(createBlog({ payload, handleSuccess }));
     };
 
@@ -131,23 +134,10 @@ const CreateBlog: NextPage = () => {
                         <FormMessage />
                     </FormItem>
 
-                    <FormField
-                        control={form.control}
-                        name="content"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Content</FormLabel>
-                                <FormControl>
-                                    <Textarea
-                                        placeholder="Enter blog content"
-                                        {...field}
-                                    />
-                                </FormControl>
-
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    <FormItem>
+                        <FormLabel>Content</FormLabel>
+                        <TextEditor onChange={handleEditorChange} />
+                    </FormItem>
 
                     <FormItem>
                         <FormLabel>Category</FormLabel>
@@ -156,6 +146,7 @@ const CreateBlog: NextPage = () => {
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 className="block w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200">
+                                <option value="">Select Category</option>
                                 <option value="General">General</option>
                                 <option value="Adventure">Adventure</option>
                                 <option value="Technology">Technology</option>
