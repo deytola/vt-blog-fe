@@ -10,7 +10,7 @@ export const getBlogs = createAsyncThunk(
         try {
             const response = await api.getBlogs({ page, query });
 
-            return response;
+            return response.data;
         } catch (err: any) {
             console.log(err);
         }
@@ -30,9 +30,9 @@ export const createBlog = createAsyncThunk(
             const response = await api.createBlog(payload);
             toast.success("Blog created successfully");
             handleSuccess();
-            return response;
+            return response.data;
         } catch (err: any) {
-            toast.error(err.response.data.message);
+            toast.error(err.response.data.message[0]);
         }
     }
 );
@@ -42,8 +42,7 @@ export const getBlogSuggestions = createAsyncThunk(
     async (query: string) => {
         try {
             const response = await api.getBlogSuggestions(query);
-
-            return response;
+            return response.data;
         } catch (err: any) {
             console.log(err);
         }
@@ -56,7 +55,7 @@ export const getBlog = createAsyncThunk(
         try {
             const response = await api.getBlog(slug);
 
-            return response;
+            return response.data;
         } catch (err: any) {
             console.log(err);
         }
@@ -70,7 +69,7 @@ export const deleteBlog = createAsyncThunk(
             const response = await api.deleteBlog(slug);
             toast.success("Blog deleted successfully");
             handleSuccess();
-            return response;
+            return response.data;
         } catch (err: any) {
             toast.error(err.response.data.message);
         }
@@ -99,7 +98,7 @@ const blogSlice = createSlice({
             })
             .addCase(getBlogs.fulfilled, (state, action) => {
                 state.blogs_loading = false;
-                state.blogs = action!.payload!?.data;
+                state.blogs = action!.payload;
             })
             .addCase(getBlogs.rejected, (state) => {
                 state.blogs_loading = false;
@@ -122,7 +121,7 @@ const blogSlice = createSlice({
             })
             .addCase(getBlogSuggestions.fulfilled, (state, action) => {
                 state.suggestions_loading = false;
-                state.suggestions = action!.payload!?.data;
+                state.suggestions = action!.payload;
             })
             .addCase(getBlogSuggestions.rejected, (state) => {
                 state.suggestions_loading = false;
@@ -134,7 +133,7 @@ const blogSlice = createSlice({
             })
             .addCase(getBlog.fulfilled, (state, action) => {
                 state.blog_loading = false;
-                state.blog = action!.payload!?.data;
+                state.blog = action!.payload;
             })
             .addCase(getBlog.rejected, (state) => {
                 state.blog_loading = false;

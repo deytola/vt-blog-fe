@@ -36,6 +36,8 @@ const BlogLayout: FC<Props> = ({ data }) => {
                         src={data?.blog?.image}
                         alt={data?.blog?.title}
                         fill
+                        priority
+                        sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 1000px"
                         className="object-cover rounded-md hover:scale-105 duration-300"
                     />
                 </figure>
